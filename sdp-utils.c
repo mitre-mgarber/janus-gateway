@@ -639,6 +639,7 @@ int janus_sdp_get_codec_pt(janus_sdp *sdp, const char *codec) {
 int janus_sdp_get_codec_pt_full(janus_sdp *sdp, const char *codec, const char *profile) {
 	if(sdp == NULL || codec == NULL)
 		return -1;
+	JANUS_LOG(LOG_WARN, "SDP reported codec '%s'\n", codec);
 	/* Check the format string (note that we only parse what browsers can negotiate) */
 	gboolean video = FALSE, vp9 = FALSE, h264 = FALSE, text = FALSE;
 	const char *format = NULL, *format2 = NULL;
@@ -763,8 +764,9 @@ int janus_sdp_get_codec_pt_full(janus_sdp *sdp, const char *codec, const char *p
 						}
 					}
 				}
-			} else if(a->name != NULL && a->value != NULL && !strcasecmp(a->name, "rtpmap")) {
+			} else if(a->name != NULL && a->value != NULL && a->value != "-1 red/1000" && !strcasecmp(a->name, "rtpmap")) {
 				pt = atoi(a->value);
+				JANUS_LOG(LOG_WARN, "Payload type (%s)\n", a);
 				check_profile = FALSE;
 				if(pt < 0) {
 					JANUS_LOG(LOG_ERR, "Invalid payload type (%s)\n", a->value);
@@ -1369,13 +1371,13 @@ janus_sdp *janus_sdp_generate_offer(const char *name, const char *address, ...) 
 			data_legacy ? "DTLS/SCTP" : "UDP/DTLS/SCTP", JANUS_SDP_DEFAULT);
 		m->c_ipv4 = TRUE;
 		m->c_addr = g_strdup(offer->c_addr);
-		m->fmts = g_list_append(m->fmts, g_strdup(data_legacy ? "5000" : "webrtc-datachannel"));
+		m->fmts = g_list_append(m->fmts, g_strdup(data_legacy ? "5000" : "webrtc-datachannel")); //change from 5000 to 5061 --reverted
 		/* Add an sctpmap attribute */
 		if(data_legacy) {
-			janus_sdp_attribute *aa = janus_sdp_attribute_create("sctpmap", "5000 webrtc-datachannel 16");
+			janus_sdp_attribute *aa = janus_sdp_attribute_create("sctpmap", "5000 webrtc-datachannel 16"); //change from 5000 to 5061 --reverted
 			m->attributes = g_list_append(m->attributes, aa);
 		} else {
-			janus_sdp_attribute *aa = janus_sdp_attribute_create("sctp-port", "5000");
+			janus_sdp_attribute *aa = janus_sdp_attribute_create("sctp-port", "5000"); //change from 5000 to 5061 --reverted
 			m->attributes = g_list_append(m->attributes, aa);
 		}
 		offer->m_lines = g_list_append(offer->m_lines, m);

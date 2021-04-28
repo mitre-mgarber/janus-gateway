@@ -300,10 +300,10 @@ function JANUSSDP.generateOffer(options)
 		end
 	end
 	if options.data == true then
-		offer[#offer+1] = { type = "m", name = "application 9 DTLS/SCTP 5000" }
+		offer[#offer+1] = { type = "m", name = "application 9 DTLS/SCTP 5000" } -- change 5000 to 5061 --reverted
 		offer[#offer+1] = { type = "c", name = "IN " .. (ipv6 == true and "IP6 " or "IP4 ") .. address }
 		offer[#offer+1] = { type = "a", name = "sendrecv" }
-		offer[#offer+1] = { type = "a", name = "sctmap", value = "5000 webrtc-datachannel 16" }
+		offer[#offer+1] = { type = "a", name = "sctmap", value = "5000 webrtc-datachannel 16" } --change 5000 to 5061 --reverted
 	end
 	-- Done
 	return offer
@@ -408,7 +408,7 @@ function JANUSSDP.generateAnswer(offer, options)
 				data = data+1
 				if data > 1 then
 					reject = true
-					answer[#answer+1] = { type = "m", name = "application 0 DTLS/SCTP 5000" }
+					answer[#answer+1] = { type = "m", name = "application 0 DTLS/SCTP 5000" } --change 5000 to 5061 --reverted
 				else
 					answer[#answer+1] = { type = "m", name = a.name }
 				end

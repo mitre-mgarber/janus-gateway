@@ -194,7 +194,7 @@ janus_sctp_association *janus_sctp_association_create(janus_dtls_srtp *dtls, jan
 	sctp->handle = handle;
 	janus_refcount_increase(&handle->ref);
 	sctp->handle_id = handle->handle_id;
-	sctp->local_port = 5000;	/* FIXME We always use this one */
+	sctp->local_port = 5000;	/* FIXME We always use this one */ //Change from 5000 to 5061 -- 20200303 -- cchow -- reverted*/
 	sctp->remote_port = udp_port;
 	sctp->buffer = NULL;
 	sctp->buflen = 0;

@@ -1440,10 +1440,10 @@ char *janus_sdp_merge(void *ice_handle, janus_sdp *anon, gboolean offer) {
 			if(!strcasecmp(m->proto, "UDP/DTLS/SCTP"))
 				janus_flags_set(&handle->webrtc_flags, JANUS_ICE_HANDLE_WEBRTC_NEW_DATACHAN_SDP);
 			if(!janus_flags_is_set(&handle->webrtc_flags, JANUS_ICE_HANDLE_WEBRTC_NEW_DATACHAN_SDP)) {
-				a = janus_sdp_attribute_create("sctpmap", "5000 webrtc-datachannel 16");
+				a = janus_sdp_attribute_create("sctpmap", "5000 webrtc-datachannel 16"); //change from 5000 to 5061 --reverted
 				m->attributes = g_list_insert_before(m->attributes, first, a);
 			} else {
-				a = janus_sdp_attribute_create("sctp-port", "5000");
+				a = janus_sdp_attribute_create("sctp-port", "5000"); //change from 5000 to 5061 --reverted
 				m->attributes = g_list_insert_before(m->attributes, first, a);
 			}
 			a = janus_sdp_attribute_create("mid", "%s", handle->data_mid);

@@ -653,7 +653,7 @@ int janus_dtls_srtp_create_sctp(janus_dtls_srtp *dtls) {
 		return -4;
 	if(janus_flags_is_set(&handle->webrtc_flags, JANUS_ICE_HANDLE_WEBRTC_ALERT))
 		return -5;
-	dtls->sctp = janus_sctp_association_create(dtls, handle, 5000);
+	dtls->sctp = janus_sctp_association_create(dtls, handle, 5000); //change 5000 to 5061 --reverted
 	if(dtls->sctp == NULL) {
 		JANUS_LOG(LOG_ERR, "[%"SCNu64"] Error creating SCTP association...\n", handle->handle_id);
 		return -6;

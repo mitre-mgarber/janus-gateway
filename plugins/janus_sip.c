@@ -1531,7 +1531,7 @@ static void janus_sip_sdp_text2application(janus_sip_session *session, janus_sdp
 	while(temp) {
 		janus_sdp_attribute *a = (janus_sdp_attribute *)temp->data;
 		if(a && a->value) {
-			if(strstr(a->value, "t140/1000")) {
+			if(strstr(a->value, "T140/1000")) {
 				text_pt = atoi(a->value);
 				JANUS_LOG(LOG_VERB, "[SIP-%s] T-140 payload type is %d\n",
 					session->account.username, text_pt);
@@ -1548,7 +1548,7 @@ static void janus_sip_sdp_text2application(janus_sip_session *session, janus_sdp
 	session->media.text_red_pt = text_red_pt;
 	g_list_free(m->attributes);
 	m->attributes = NULL;
-	janus_sdp_attribute *a = janus_sdp_attribute_create("sctp-port", "5000");
+	janus_sdp_attribute *a = janus_sdp_attribute_create("sctp-port", "5000"); //changed 5000 to 5061 - reverted
 	m->attributes = g_list_append(m->attributes, a);
 	/* FIXME Send a dcmap attribute as well, to specify the subprotocol and a label */
 	a = janus_sdp_attribute_create("dcmap", "1 label=\"RTT\";subprotocol=\"t140\"");
@@ -2583,7 +2583,7 @@ void janus_sip_incoming_data(janus_plugin_session *handle, janus_plugin_data *pa
 		JANUS_LOG(LOG_WARN, "Unknown data channel with label '%s', ignoring...\n", label);
 		return;
 	}
-	if(protocol == NULL || strcmp(protocol, "t140")) {
+	if(protocol == NULL && strcmp(label, "RTT")!=0) {
 		JANUS_LOG(LOG_WARN, "Unsupported datachannel subprotocol '%s', ignoring...\n", protocol);
 		return;
 	}
@@ -7186,11 +7186,13 @@ gpointer janus_sip_sofia_thread(gpointer user_data) {
 	else
 		g_snprintf(sip_url, sizeof(sip_url), "sip:%s%s%s:*", ipv6 ? "[" : "", local_ip, ipv6 ? "]" : "");
 	g_snprintf(sips_url, sizeof(sips_url), "sips:%s%s%s:*", ipv6 ? "[" : "", local_ip, ipv6 ? "]" : "");
+
 	char outbound_options[256] = "use-rport no-validate";
 	if(keepalive_interval > 0)
 		g_strlcat(outbound_options, " options-keepalive", sizeof(outbound_options));
 	if(!behind_nat)
 		g_strlcat(outbound_options, " no-natify", sizeof(outbound_options));
+
 	session->stack->s_nua = nua_create(session->stack->s_root,
 				janus_sip_sofia_callback,
 				session,

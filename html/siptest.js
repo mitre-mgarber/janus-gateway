@@ -688,7 +688,7 @@ $(document).ready(function() {
 											// Prevent cursor positioning
 											var text = $(this).val();
 											$(this).focus().val('').val(text);
-										}).live("click", function(event) {
+										}).on("click", function(event) {
 											// Prevent cursor positioning
 											var text = $(this).val();
 											$(this).focus().val('').val(text);
@@ -697,7 +697,8 @@ $(document).ready(function() {
 								ondata: function(data) {
 									Janus.debug("We got data from the DataChannel!", data);
 									// Parse the text, and update the string
-									var array = new Uint8Array(data);
+									var enc = new TextEncoder();
+									var array = new Uint8Array(enc.encode(data));
 									var str = "";
 									for(var i=0, len=array.length; i<len; ++i) {
 										if(array[i] === 8) {
@@ -984,11 +985,14 @@ function doCall(ev) {
 }
 function actuallyDoCall(handle, uri, doVideo, referId) {
 	handle.peer = uri;
+  console.log('actuallyDoCall')
+	console.log(handle)
 	handle.createOffer(
 		{
 			media: {
 				audioSend: true, audioRecv: true,		// We DO want audio
-				videoSend: doVideo, videoRecv: doVideo	// We MAY want video
+				videoSend: doVideo, videoRecv: doVideo,	// We MAY want video
+				data:true
 				// Should you want to negotiate support for real-time text
 				// as well, all you need to do is pass data:true here
 			},

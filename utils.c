@@ -437,6 +437,10 @@ const char *janus_get_codec_from_pt(const char *sdp, int pt) {
 						return "isac16";
 					if(strstr(name, "isac/32") || strstr(name, "ISAC/32"))
 						return "isac32";
+					if(strstr(name, "t140/1000") || strstr(name, "T140"))
+						return "t140";
+					if(strstr(name, "red/1000") || strstr(name, "RED"))
+						return "t140-red";
 					JANUS_LOG(LOG_ERR, "Unsupported codec '%s'\n", name);
 					return NULL;
 				}

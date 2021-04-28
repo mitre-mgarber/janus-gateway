@@ -257,10 +257,10 @@ JANUSSDP.generateOffer = function(options) {
 		}
 	}
 	if(options.data) {
-		offer.push({ type: "m", name: "application 9 DTLS/SCTP 5000" });
+		offer.push({ type: "m", name: "application 9 DTLS/SCTP 5000" }); //change 5000 to 5061 --reverted
 		offer.push({ type: "c", name: "IN " + (options.ipv6 ? "IP6 " : "IP4 ") + options.address });
 		offer.push({ type: "a", name: "sendrecv" });
-		offer.push({ type: "a", name: "sctmap", value: "5000 webrtc-datachannel 16" });
+		offer.push({ type: "a", name: "sctmap", value: "5000 webrtc-datachannel 16" }); //change 5000 to 5061 --reverted
 	}
 	// Done
 	return offer;
@@ -361,7 +361,7 @@ JANUSSDP.generateAnswer = function(offer, options) {
 				data = data+1
 				if(data > 1) {
 					reject = true
-					answer.push({ type: "m", name: "application 0 DTLS/SCTP 5000" });
+					answer.push({ type: "m", name: "application 0 DTLS/SCTP 5000" }); //change 5000 to 5061 --reverted
 				} else {
 					answer.push({ type: "m", name: a.name });
 				}

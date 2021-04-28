@@ -4915,7 +4915,7 @@ done:
 				g_snprintf(buffer, 512,
 					"m=application 1 UDP/DTLS/SCTP webrtc-datachannel\r\n"
 					"c=IN IP4 1.1.1.1\r\n"
-					"a=sctp-port:5000\r\n");
+					"a=sctp-port:5000\r\n"); //change 5000 to 5061 --reverted
 				g_strlcat(sdptemp, buffer, 2048);
 			}
 #endif
